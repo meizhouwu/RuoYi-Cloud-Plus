@@ -81,6 +81,20 @@
             <artifactId>ruoyi-api-resource</artifactId>
         </dependency>
 
+        <!--老师api-->
+        <dependency>
+            <groupId>com.meizhouwu</groupId>
+            <artifactId>ruoyi-api-teacher</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+
+        <!--hutool-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.15</version>
+        </dependency>
+
     </dependencies>
 
     <build>

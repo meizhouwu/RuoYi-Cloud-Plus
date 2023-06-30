@@ -302,6 +302,14 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!--创建老师按钮-->
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="创建老师" v-if="isShow">
+              <el-checkbox v-model="form.isTeacher">勾选后自动创建老师对象</el-checkbox>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -353,6 +361,7 @@ export default {
   components: { Treeselect },
   data() {
     return {
+      isShow: true,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -523,7 +532,8 @@ export default {
         status: "0",
         remark: undefined,
         postIds: [],
-        roleIds: []
+        roleIds: [],
+        isTeacher: false
       };
       this.resetForm("form");
     },
@@ -570,6 +580,7 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
+      this.isShow = false;
       this.reset();
       const userId = row.userId || this.ids;
       getUser(userId).then(response => {

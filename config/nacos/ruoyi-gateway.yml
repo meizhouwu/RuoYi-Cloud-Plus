@@ -86,6 +86,14 @@ spring:
           filters:
             - StripPrefix=1
 
+        # 老师管理服务
+        - id: ruoyi-teacher
+          uri: lb://ruoyi-teacher
+          predicates:
+            - Path=/teacher/**
+          filters:
+            - StripPrefix=1
+
     # sentinel 配置
     sentinel:
       filter:

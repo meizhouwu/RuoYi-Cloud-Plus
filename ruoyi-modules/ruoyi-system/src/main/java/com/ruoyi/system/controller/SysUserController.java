@@ -19,13 +19,17 @@ import com.ruoyi.common.satoken.utils.LoginHelper;
 import com.ruoyi.system.api.domain.SysDept;
 import com.ruoyi.system.api.domain.SysRole;
 import com.ruoyi.system.api.domain.SysUser;
+import com.ruoyi.system.api.domain.SysUserDto;
 import com.ruoyi.system.api.model.LoginUser;
 import com.ruoyi.system.domain.vo.SysUserExportVo;
 import com.ruoyi.system.domain.vo.SysUserImportVo;
 import com.ruoyi.system.listener.SysUserImportListener;
 import com.ruoyi.system.service.*;
+import com.ruoyi.teacher.api.RemoteTeacherService;
+import com.ruoyi.teacher.api.domain.TeacherDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +58,9 @@ public class SysUserController extends BaseController {
     private final ISysPostService postService;
     private final ISysPermissionService permissionService;
     private final ISysDeptService deptService;
+
+    @DubboReference
+    private final RemoteTeacherService remoteTeacherService;
 
     /**
      * 获取用户列表
@@ -150,7 +157,9 @@ public class SysUserController extends BaseController {
     @SaCheckPermission("system:user:add")
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping
-    public R<Void> add(@Validated @RequestBody SysUser user) {
+    public R<Void> add(@Validated @RequestBody SysUserDto sysUserDto) {
+        SysUser user = new SysUser();
+        BeanUtil.copyProperties(sysUserDto,user);
         if (!userService.checkUserNameUnique(user)) {
             return R.fail("新增用户'" + user.getUserName() + "'失败，登录账号已存在");
         } else if (StringUtils.isNotEmpty(user.getPhonenumber())
@@ -161,7 +170,21 @@ public class SysUserController extends BaseController {
             return R.fail("新增用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
         user.setPassword(BCrypt.hashpw(user.getPassword()));
-        return toAjax(userService.insertUser(user));
+        int i = userService.insertUser(user);
+        Long userId = user.getUserId();
+        // 新增老师
+        Boolean isTeacher = sysUserDto.getIsTeacher();
+        if (isTeacher){
+            //设置默认性别
+            int sex = sysUserDto.getSex() != null ? Integer.parseInt(sysUserDto.getSex()) : 2;
+            TeacherDto teacherDto = new TeacherDto();
+            teacherDto.setUserId(userId);
+            teacherDto.setSex(sex);
+            teacherDto.setTel(sysUserDto.getPhonenumber());
+            teacherDto.setName(sysUserDto.getUserName());
+            remoteTeacherService.addTeacher(teacherDto);
+        }
+        return toAjax(i);
     }
 
     /**
