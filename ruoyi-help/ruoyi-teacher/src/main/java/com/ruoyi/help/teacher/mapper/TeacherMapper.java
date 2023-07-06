@@ -1,8 +1,8 @@
 package com.ruoyi.help.teacher.mapper;
 
 import com.ruoyi.common.mybatis.core.mapper.BaseMapperPlus;
-import com.ruoyi.help.teacher.domain.Teacher;
-import com.ruoyi.help.teacher.domain.vo.TeacherVo;
+import com.ruoyi.teacher.api.domain.Teacher;
+import com.ruoyi.teacher.api.domain.vo.TeacherVo;
 
 /**
  * 老师管理Mapper接口

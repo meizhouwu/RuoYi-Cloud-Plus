@@ -43,10 +43,4 @@ export function delClass(id) {
   })
 }
 
-// 查询班级列表
-export function classList() {
-  return request({
-    url: '/class/class/classList',
-    method: 'get',
-  })
-}
+

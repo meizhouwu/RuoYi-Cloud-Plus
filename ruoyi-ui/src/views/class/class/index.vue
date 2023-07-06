@@ -39,6 +39,26 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="讲师" prop="talkTeacher">
+        <el-select v-model="queryParams.talkTeacher" placeholder="请选择讲师" clearable>
+          <el-option
+            v-for="item in talkTeacherList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="技术老师" prop="techTeacher">
+        <el-select v-model="queryParams.techTeacher" placeholder="请选择技术老师" clearable>
+          <el-option
+            v-for="item in techTeacherList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -202,6 +222,27 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="讲师" prop="talkTeacher">
+          <el-select v-model="form.talkTeacher" placeholder="请选择讲师">
+            <el-option
+              v-for="item in talkTeacherList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="技术老师" prop="techTeacher">
+          <el-select v-model="form.techTeacher" placeholder="请选择技术老师">
+            <el-option
+              v-for="item in techTeacherList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
@@ -213,7 +254,7 @@
 
 <script>
 import { listClass, getClass, delClass, addClass, updateClass } from "@/api/class/class";
-import {empTeacherList, helpTeacherList, teacherList} from "@/api/teacher/teacher";
+import {empTeacherList, helpTeacherList, talkTeacherList, teacherList, techTeacherList} from "@/api/teacher/teacher";
 
 export default {
   name: "Class",
@@ -247,6 +288,8 @@ export default {
         teacher: undefined,
         employmentTeacher: undefined,
         helpTeacher: undefined,
+        talkTeacher: undefined,
+        techTeacher: undefined
       },
       // 表单参数
       form: {},
@@ -273,13 +316,23 @@ export default {
         helpTeacher: [
           { required: true, message: "助教老师不能为空", trigger: "change" }
         ],
+        talkTeacher: [
+          { required: true, message: "讲师不能为空", trigger: "change" }
+        ],
+        techTeacher: [
+          { required: true, message: "技术老师不能为空", trigger: "change" }
+        ],
       },
       //班主任
       teacherList: [],
       //就业老师
       empTeacherList: [],
       //助教老师
-      helpTeacherList: []
+      helpTeacherList: [],
+      //讲师
+      talkTeacherList: [],
+      //技术老师
+      techTeacherList: []
     };
   },
   created() {
@@ -287,8 +340,48 @@ export default {
     this.getTeacherList();
     this.getEmpTeacherList();
     this.getHelpTeacherList();
+    this.getTalkTeacherList();
+    this.getTechTeacherList();
   },
   methods: {
+    /*查询所有班主任*/
+    getTalkTeacherList(){
+      this.loading = true;
+      talkTeacherList().then(response => {
+        this.talkTeacherList = response;
+        console.log(response)
+        console.log(this.teacherList)
+        this.loading = false;
+      })
+    },
+    /** 老师姓名，显示 */
+    getTalkTeacherListName(id) {
+      for (let i = 0; i < this.talkTeacherList.length; i++) {
+        if (this.talkTeacherList[i].id === id) {
+          return this.talkTeacherList[i].name;
+        }
+      }
+      return null; // 如果没有找到对应的教师，则返回 null
+    },
+    /*查询所有班主任*/
+    getTechTeacherList(){
+      this.loading = true;
+      techTeacherList().then(response => {
+        this.techTeacherList = response;
+        console.log(response)
+        console.log(this.teacherList)
+        this.loading = false;
+      })
+    },
+    /** 老师姓名，显示 */
+    getTechTeacherListName(id) {
+      for (let i = 0; i < this.techTeacherList.length; i++) {
+        if (this.techTeacherList[i].id === id) {
+          return this.techTeacherList[i].name;
+        }
+      }
+      return null; // 如果没有找到对应的教师，则返回 null
+    },
     /*查询所有班主任*/
     getTeacherList(){
       this.loading = true;

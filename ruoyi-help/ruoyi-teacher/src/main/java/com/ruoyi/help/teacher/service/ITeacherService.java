@@ -2,8 +2,8 @@ package com.ruoyi.help.teacher.service;
 
 import com.ruoyi.common.mybatis.core.page.PageQuery;
 import com.ruoyi.common.mybatis.core.page.TableDataInfo;
-import com.ruoyi.help.teacher.domain.bo.TeacherBo;
-import com.ruoyi.help.teacher.domain.vo.TeacherVo;
+import com.ruoyi.teacher.api.domain.bo.TeacherBo;
+import com.ruoyi.teacher.api.domain.vo.TeacherVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -54,4 +54,8 @@ public interface ITeacherService {
     List<TeacherVo> empTeacherList();
 
     List<TeacherVo> helpTeacherList();
+
+    List<TeacherVo> techTeacherList();
+
+    List<TeacherVo> talkTeacherList();
 }

@@ -1,9 +1,9 @@
 package com.ruoyi.help.classes.service;
 
+import com.ruoyi.classes.api.domain.bo.ClassesBo;
+import com.ruoyi.classes.api.domain.vo.ClassesVo;
 import com.ruoyi.common.mybatis.core.page.PageQuery;
 import com.ruoyi.common.mybatis.core.page.TableDataInfo;
-import com.ruoyi.help.classes.domain.bo.ClassesBo;
-import com.ruoyi.help.classes.domain.vo.ClassesVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,5 +46,5 @@ public interface IClassesService {
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
-    List<ClassesVo> classList();
+
 }

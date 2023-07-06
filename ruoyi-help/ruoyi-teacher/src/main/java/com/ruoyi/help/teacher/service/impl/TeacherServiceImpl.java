@@ -7,11 +7,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.mybatis.core.page.PageQuery;
 import com.ruoyi.common.mybatis.core.page.TableDataInfo;
-import com.ruoyi.help.teacher.domain.Teacher;
-import com.ruoyi.help.teacher.domain.bo.TeacherBo;
-import com.ruoyi.help.teacher.domain.vo.TeacherVo;
 import com.ruoyi.help.teacher.mapper.TeacherMapper;
 import com.ruoyi.help.teacher.service.ITeacherService;
+import com.ruoyi.teacher.api.domain.Teacher;
+import com.ruoyi.teacher.api.domain.bo.TeacherBo;
+import com.ruoyi.teacher.api.domain.vo.TeacherVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -131,6 +131,22 @@ public class TeacherServiceImpl implements ITeacherService {
     public List<TeacherVo> helpTeacherList() {
         LambdaQueryWrapper<Teacher> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Teacher::getType,5);
+        List<TeacherVo> teacherVos = baseMapper.selectVoList(wrapper, TeacherVo.class);
+        return teacherVos;
+    }
+
+    @Override
+    public List<TeacherVo> techTeacherList() {
+        LambdaQueryWrapper<Teacher> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Teacher::getType,2);
+        List<TeacherVo> teacherVos = baseMapper.selectVoList(wrapper, TeacherVo.class);
+        return teacherVos;
+    }
+
+    @Override
+    public List<TeacherVo> talkTeacherList() {
+        LambdaQueryWrapper<Teacher> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Teacher::getType,1);
         List<TeacherVo> teacherVos = baseMapper.selectVoList(wrapper, TeacherVo.class);
         return teacherVos;
     }

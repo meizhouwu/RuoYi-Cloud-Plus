@@ -4,12 +4,12 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ruoyi.classes.api.domain.Classes;
+import com.ruoyi.classes.api.domain.bo.ClassesBo;
+import com.ruoyi.classes.api.domain.vo.ClassesVo;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.mybatis.core.page.PageQuery;
 import com.ruoyi.common.mybatis.core.page.TableDataInfo;
-import com.ruoyi.help.classes.domain.Classes;
-import com.ruoyi.help.classes.domain.bo.ClassesBo;
-import com.ruoyi.help.classes.domain.vo.ClassesVo;
 import com.ruoyi.help.classes.mapper.ClassesMapper;
 import com.ruoyi.help.classes.service.IClassesService;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +65,8 @@ public class ClassesServiceImpl implements IClassesService {
         lqw.eq(bo.getTeacher() != null, Classes::getTeacher, bo.getTeacher());
         lqw.eq(bo.getEmploymentTeacher() != null, Classes::getEmploymentTeacher, bo.getEmploymentTeacher());
         lqw.eq(bo.getHelpTeacher() != null, Classes::getHelpTeacher, bo.getHelpTeacher());
+        lqw.eq(bo.getTalkTeacher() != null, Classes::getTalkTeacher, bo.getTalkTeacher());
+        lqw.eq(bo.getTechTeacher() != null, Classes::getTechTeacher, bo.getTechTeacher());
         return lqw;
     }
 
@@ -110,8 +112,5 @@ public class ClassesServiceImpl implements IClassesService {
         return baseMapper.deleteBatchIds(ids) > 0;
     }
 
-    @Override
-    public List<ClassesVo> classList() {
-        return baseMapper.selectVoList(null);
-    }
+
 }

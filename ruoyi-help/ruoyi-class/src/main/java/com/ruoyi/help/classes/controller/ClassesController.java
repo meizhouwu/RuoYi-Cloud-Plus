@@ -1,6 +1,8 @@
 package com.ruoyi.help.classes.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import com.ruoyi.classes.api.domain.bo.ClassesBo;
+import com.ruoyi.classes.api.domain.vo.ClassesVo;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.validate.AddGroup;
 import com.ruoyi.common.core.validate.EditGroup;
@@ -10,8 +12,6 @@ import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.mybatis.core.page.PageQuery;
 import com.ruoyi.common.mybatis.core.page.TableDataInfo;
-import com.ruoyi.help.classes.domain.bo.ClassesBo;
-import com.ruoyi.help.classes.domain.vo.ClassesVo;
 import com.ruoyi.help.classes.service.IClassesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -41,7 +41,7 @@ public class ClassesController extends BaseController {
     /**
      * 查询班级管理列表
      */
-    @SaCheckPermission("class:class:list")
+//    @SaCheckPermission("class:class:list")
     @GetMapping("/list")
     public TableDataInfo<ClassesVo> list(ClassesBo bo, PageQuery pageQuery) {
         return iClassesService.queryPageList(bo, pageQuery);
@@ -63,7 +63,7 @@ public class ClassesController extends BaseController {
      *
      * @param id 主键
      */
-    @SaCheckPermission("class:class:query")
+//    @SaCheckPermission("class:class:query")
     @GetMapping("/{id}")
     public R<ClassesVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
         return R.ok(iClassesService.queryById(id));
@@ -101,11 +101,5 @@ public class ClassesController extends BaseController {
         return toAjax(iClassesService.deleteWithValidByIds(Arrays.asList(ids), true));
     }
 
-    /**
-     * 查询班级列表
-     */
-    @GetMapping("/classList")
-    public List<ClassesVo> classList(){
-        return iClassesService.classList();
-    }
+
 }

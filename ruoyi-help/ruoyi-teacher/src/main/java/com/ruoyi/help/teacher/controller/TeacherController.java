@@ -10,9 +10,9 @@ import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.mybatis.core.page.PageQuery;
 import com.ruoyi.common.mybatis.core.page.TableDataInfo;
-import com.ruoyi.help.teacher.domain.bo.TeacherBo;
-import com.ruoyi.help.teacher.domain.vo.TeacherVo;
 import com.ruoyi.help.teacher.service.ITeacherService;
+import com.ruoyi.teacher.api.domain.bo.TeacherBo;
+import com.ruoyi.teacher.api.domain.vo.TeacherVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,7 @@ public class TeacherController extends BaseController {
     /**
      * 查询老师管理列表
      */
-    @SaCheckPermission("teacher:teacher:list")
+//    @SaCheckPermission("teacher:teacher:list")
     @GetMapping("/list")
     public TableDataInfo<TeacherVo> list(TeacherBo bo, PageQuery pageQuery) {
         return iTeacherService.queryPageList(bo, pageQuery);
@@ -125,5 +125,22 @@ public class TeacherController extends BaseController {
     @GetMapping("/helpTeacherList")
     public List<TeacherVo> helpTeacherList() {
         return iTeacherService.helpTeacherList();
+    }
+
+    /**
+     * 查询所有讲师
+     */
+    @GetMapping("/talkTeacherList")
+    public List<TeacherVo> talkTeacherList() {
+        return iTeacherService.talkTeacherList();
+    }
+
+
+    /**
+     * 查询所有技术老师
+     */
+    @GetMapping("/techTeacherList")
+    public List<TeacherVo> techTeacherList() {
+        return iTeacherService.techTeacherList();
     }
 }

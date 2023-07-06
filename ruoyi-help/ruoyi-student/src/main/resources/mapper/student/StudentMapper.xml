@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.help.student.mapper.StudentMapper">
 
-    <resultMap type="com.ruoyi.help.student.domain.Student" id="StudentResult">
+    <resultMap type="com.ruoyi.student.api.domain.Student" id="StudentResult">
     <result property="id" column="id"/>
     <result property="name" column="name"/>
     <result property="sex" column="sex"/>
@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <result property="major" column="major"/>
     <result property="classId" column="class_id"/>
     <result property="school" column="school"/>
+    <result property="email" column="email"/>
     <result property="tel" column="tel"/>
     <result property="familyTel" column="family_tel"/>
     <result property="createTime" column="create_time"/>

@@ -180,6 +180,7 @@ public class SysUserController extends BaseController {
             TeacherDto teacherDto = new TeacherDto();
             teacherDto.setUserId(userId);
             teacherDto.setSex(sex);
+            teacherDto.setEmail(sysUserDto.getEmail());
             teacherDto.setTel(sysUserDto.getPhonenumber());
             teacherDto.setName(sysUserDto.getUserName());
             remoteTeacherService.addTeacher(teacherDto);

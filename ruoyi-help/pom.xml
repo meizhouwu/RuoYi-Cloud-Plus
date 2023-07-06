@@ -16,6 +16,7 @@
         <module>ruoyi-class</module>
         <module>ruoyi-teacher</module>
         <module>ruoyi-student</module>
+        <module>ruoyi-helpM</module>
     </modules>
 
     <properties>

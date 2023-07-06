@@ -1,8 +1,9 @@
 package com.ruoyi.help.classes.mapper;
 
+
+import com.ruoyi.classes.api.domain.Classes;
+import com.ruoyi.classes.api.domain.vo.ClassesVo;
 import com.ruoyi.common.mybatis.core.mapper.BaseMapperPlus;
-import com.ruoyi.help.classes.domain.Classes;
-import com.ruoyi.help.classes.domain.vo.ClassesVo;
 
 /**
  * 班级管理Mapper接口

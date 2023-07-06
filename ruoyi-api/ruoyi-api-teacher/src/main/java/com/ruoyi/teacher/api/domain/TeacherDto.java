@@ -38,6 +38,10 @@ public class TeacherDto extends BaseEntity {
      * 性别
      */
     private Integer sex;
+    /**
+     * 邮箱
+     */
+    private String email;
 
 
     private Long userId;

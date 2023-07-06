@@ -1,10 +1,9 @@
 package com.ruoyi.help.student.service;
 
-import com.ruoyi.help.student.domain.Student;
-import com.ruoyi.help.student.domain.vo.StudentVo;
-import com.ruoyi.help.student.domain.bo.StudentBo;
 import com.ruoyi.common.mybatis.core.page.PageQuery;
 import com.ruoyi.common.mybatis.core.page.TableDataInfo;
+import com.ruoyi.student.api.domain.bo.StudentBo;
+import com.ruoyi.student.api.domain.vo.StudentVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,4 +45,10 @@ public interface IStudentService {
      * 校验并批量删除学生管理信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+
+    /**
+     * 通过姓名查询学生
+     */
+    StudentVo queryByName(String name);
 }

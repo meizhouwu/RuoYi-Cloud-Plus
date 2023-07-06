@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.help.help.mapper.HelpMapper">
+
+    <resultMap type="com.ruoyi.help.help.domain.Help" id="HelpResult">
+    <result property="id" column="id"/>
+    <result property="name" column="name"/>
+    <result property="email" column="email"/>
+    <result property="tel" column="tel"/>
+    <result property="classId" column="class_id"/>
+    <result property="startDate" column="start_date"/>
+    <result property="teacherId" column="teacher_id"/>
+    <result property="errType" column="err_type"/>
+    <result property="errNote" column="err_note"/>
+    <result property="dealStatus" column="deal_status"/>
+    <result property="teacherNote" column="teacher_note"/>
+    <result property="endDate" column="end_date"/>
+    <result property="createTime" column="create_time"/>
+    <result property="createBy" column="create_by"/>
+    <result property="updateTime" column="update_time"/>
+    <result property="updateBy" column="update_by"/>
+    </resultMap>
+
+
+</mapper>

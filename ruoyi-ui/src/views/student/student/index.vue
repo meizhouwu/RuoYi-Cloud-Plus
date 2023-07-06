@@ -197,7 +197,7 @@
 
 <script>
 import { listStudent, getStudent, delStudent, addStudent, updateStudent } from "@/api/student/student";
-import {classList} from "@/api/class/class";
+import {listClass} from "@/api/class/class";
 
 export default {
   name: "Student",
@@ -273,8 +273,8 @@ export default {
     /*查询班级列表*/
     getClassList(){
       this.loading = true;
-      classList().then(response => {
-        this.classList = response;
+      listClass(this.queryParams).then(response => {
+        this.classList = response.rows;
         this.loading = false;
       })
     },

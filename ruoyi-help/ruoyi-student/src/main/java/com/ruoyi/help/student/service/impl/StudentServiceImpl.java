@@ -7,11 +7,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.mybatis.core.page.PageQuery;
 import com.ruoyi.common.mybatis.core.page.TableDataInfo;
-import com.ruoyi.help.student.domain.Student;
-import com.ruoyi.help.student.domain.bo.StudentBo;
-import com.ruoyi.help.student.domain.vo.StudentVo;
 import com.ruoyi.help.student.mapper.StudentMapper;
 import com.ruoyi.help.student.service.IStudentService;
+import com.ruoyi.student.api.domain.Student;
+import com.ruoyi.student.api.domain.bo.StudentBo;
+import com.ruoyi.student.api.domain.vo.StudentVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -108,5 +108,12 @@ public class StudentServiceImpl implements IStudentService {
             //TODO 做一些业务上的校验,判断是否需要校验
         }
         return baseMapper.deleteBatchIds(ids) > 0;
+    }
+
+    @Override
+    public StudentVo queryByName(String name) {
+        LambdaQueryWrapper<Student> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Student::getName,name);
+        return baseMapper.selectVoOne(wrapper,StudentVo.class);
     }
 }

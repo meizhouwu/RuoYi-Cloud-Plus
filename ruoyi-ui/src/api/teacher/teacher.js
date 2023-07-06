@@ -67,5 +67,21 @@ export function helpTeacherList() {
   })
 }
 
+// 查询所有讲师
+export function talkTeacherList() {
+  return request({
+    url: '/teacher/teacher/talkTeacherList',
+    method: 'get',
+  })
+}
+
+// 查询所有技术老师
+export function techTeacherList() {
+  return request({
+    url: '/teacher/teacher/techTeacherList',
+    method: 'get',
+  })
+}
+
 
 
