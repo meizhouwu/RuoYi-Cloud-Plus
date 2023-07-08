@@ -28,4 +28,6 @@ public interface RemoteTeacherService {
      * 查询老师管理
      */
     TeacherVo queryById(Long id);
+
+    TeacherVo queryByUserId(Long id);
 }

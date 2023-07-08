@@ -136,22 +136,70 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-drawer
+      title="看看都有什么任务!"
+      :visible.sync="table"
+      direction="rtl"
+      size="50%">
+      <el-table :data="list">
+        <el-table-column property="name" label="任务名" width="150">
+          <template slot-scope="scope">
+            学生[{{ scope.row.name }}]需要你的帮助
+          </template>
+        </el-table-column>
+        <el-table-column property="errType" label="问题类型" width="200">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.help_student_err" :value="scope.row.errType"/>
+          </template>
+        </el-table-column>
+        <el-table-column property="dealStatus" label="处理状态" width="200">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.help_status" :value="scope.row.dealStatus"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" >
+          <template>
+            <a href="http://localhost/help/help" style="color: deepskyblue">去做任务</a>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-drawer>
   </div>
 </template>
 
 <script>
+import {listByTeacherId} from "@/api/help/help";
+
+
 export default {
   name: "Index",
+  dicts: ['help_student_err', 'help_status'],
   data() {
     return {
+      loading: false,
+      list: [],
+      table: true,
       // 版本号
       version: "1.7.0",
     };
+  },
+  created() {
+    this.getList();
   },
   methods: {
     goTarget(href) {
       window.open(href, "_blank");
     },
+    getList() {
+      this.loading = true
+      listByTeacherId().then(response => {
+        debugger
+        console.log(response)
+        this.list = response
+        this.loading = false
+      })
+    },
+
   },
 };
 </script>

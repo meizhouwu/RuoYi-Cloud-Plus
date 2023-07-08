@@ -150,4 +150,11 @@ public class TeacherServiceImpl implements ITeacherService {
         List<TeacherVo> teacherVos = baseMapper.selectVoList(wrapper, TeacherVo.class);
         return teacherVos;
     }
+
+    @Override
+    public TeacherVo queryByUserId(Long id) {
+        LambdaQueryWrapper<Teacher> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Teacher::getUserId,id);
+        return baseMapper.selectVoOne(wrapper, TeacherVo.class);
+    }
 }

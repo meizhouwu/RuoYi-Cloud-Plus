@@ -48,8 +48,10 @@
                         v-model="helpForm.startDate"
                         type="datetime"
                         value-format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="请选择预约日期（必填）"
-                        style="width: 100%">
+                        placeholder="请选择预约日期，提前三天预约（必填）"
+                        :picker-options="afterDate"
+                        style="width: 100%"
+                        >
         </el-date-picker>
       </el-form-item>
 
@@ -124,6 +126,12 @@ export default {
   dicts: ['help_student_err'],
   data() {
     return {
+      afterDate: {
+        disabledDate(time) {
+          // 禁止选择以前的时间
+          return time.getTime() < Date.now() + 8.64e7 * 3;
+        },
+      },
       classesList: [],
       teacherList: [],
       helpForm: {
@@ -170,7 +178,6 @@ export default {
   created() {
     this.getListTeacher();
     this.getListClass();
-
   },
   methods: {
     getListTeacher() {
@@ -188,8 +195,10 @@ export default {
       this.$refs["helpForm"].validate(valid => {
         if (valid) {
           addHelp(this.helpForm).then(response => {
+            debugger
+            console.log(response)
             this.$modal.msgSuccess("预约成功");
-          });
+          }).catch()
         }
         this.reset();
       });

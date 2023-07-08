@@ -143,6 +143,12 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['help:help:remove']"
           >删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleOver(scope.row)"
+          >帮扶移交</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -221,6 +227,37 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!--帮扶移交界面-->
+    <el-dialog title="帮扶移交" :visible.sync="overFormOpen" width="500px" append-to-body>
+      <el-form ref="overForm" :model="overForm" :rules="overFormRules" label-width="80px">
+        <el-form-item label="学生姓名" prop="name">
+          <el-input v-model="overForm.helpId" placeholder="请输入学生姓名">
+            <template slot-scope="scope">
+              <span>{{ scope.row.name}}</span>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="移交老师" prop="newId">
+          <el-select v-model="overForm.newId" placeholder="请选择移交老师">
+            <el-option
+              v-for="item in teacherList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+              v-if="item.id !=overForm.oldId"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="移交备注" prop="note">
+          <el-input v-model="overForm.note" placeholder="请输入移交备注" type="textarea"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -272,7 +309,18 @@ export default {
         ],
       },
       classList: [],
-      teacherList: []
+      teacherList: [],
+      // 移交表单
+      overForm: {},
+      overFormOpen: false,
+      overFormRules: {
+        newId: [
+          { required: true, message: "不能为空", trigger: "blur" }
+        ],
+        note: [
+          { required: true, message: "不能为空", trigger: "blur" }
+        ],
+      }
     };
   },
   created() {
@@ -283,8 +331,9 @@ export default {
   methods: {
     /*查询班级列表*/
     getClassList(){
+
       this.loading = true;
-      listClass(this.queryParams).then(response => {
+      listClass().then(response => {
         this.classList = response.rows;
         this.loading = false;
       })
@@ -301,7 +350,8 @@ export default {
     /*查询班级列表*/
     getTeacherList(){
       this.loading = true;
-      listTeacher(this.queryParams).then(response => {
+      listTeacher().then(response => {
+        console.log(response)
         this.teacherList = response.rows;
         this.loading = false;
       })
@@ -327,6 +377,7 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.overFormOpen = false;
       this.reset();
     },
     // 表单重置
@@ -430,7 +481,18 @@ export default {
       this.download('help/help/export', {
         ...this.queryParams
       }, `help_${new Date().getTime()}.xlsx`)
-    }
+    },
+    /** 帮扶移交界面*/
+    handleOver(row){
+      this.overFormOpen = true;
+      this.overForm = {
+        helpId: row.id,
+        oldId: row.teacherId,
+        newId: '',
+        note: ''
+      }
+    },
+
   }
 };
 </script>

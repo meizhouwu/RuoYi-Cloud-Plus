@@ -8,7 +8,8 @@ spring:
     # 应用名称
     name: ruoyi-teacher
   profiles:
-    # 环境配置
+#    active: dev
+  # 环境配置
     active: @profiles.active@
 
 --- # nacos 配置

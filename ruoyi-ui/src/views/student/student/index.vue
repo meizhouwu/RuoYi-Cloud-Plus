@@ -273,7 +273,7 @@ export default {
     /*查询班级列表*/
     getClassList(){
       this.loading = true;
-      listClass(this.queryParams).then(response => {
+      listClass().then(response => {
         this.classList = response.rows;
         this.loading = false;
       })

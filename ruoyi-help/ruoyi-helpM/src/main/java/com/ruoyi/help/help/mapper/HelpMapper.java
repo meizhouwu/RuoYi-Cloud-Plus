@@ -1,8 +1,9 @@
 package com.ruoyi.help.help.mapper;
 
+
 import com.ruoyi.common.mybatis.core.mapper.BaseMapperPlus;
-import com.ruoyi.help.help.domain.Help;
-import com.ruoyi.help.help.domain.vo.HelpVo;
+import com.ruoyi.help.api.domain.Help;
+import com.ruoyi.help.api.domain.vo.HelpVo;
 
 /**
  * 帮扶管理Mapper接口

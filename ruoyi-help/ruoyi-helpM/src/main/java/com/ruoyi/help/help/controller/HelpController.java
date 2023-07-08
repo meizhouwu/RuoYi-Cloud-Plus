@@ -1,5 +1,6 @@
 package com.ruoyi.help.help.controller;
 
+
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.validate.AddGroup;
@@ -10,10 +11,11 @@ import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.mybatis.core.page.PageQuery;
 import com.ruoyi.common.mybatis.core.page.TableDataInfo;
-import com.ruoyi.help.help.domain.bo.HelpBo;
-import com.ruoyi.help.help.domain.vo.HelpVo;
+import com.ruoyi.help.api.domain.bo.HelpBo;
+import com.ruoyi.help.api.domain.vo.HelpVo;
 import com.ruoyi.help.help.service.IHelpService;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,8 +77,8 @@ public class HelpController extends BaseController {
 //    @SaCheckPermission("help:help:add")
     @Log(title = "帮扶管理", businessType = BusinessType.INSERT)
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody HelpBo bo) {
-        return toAjax(iHelpService.insertByBo(bo));
+    public R<T> add(@Validated(AddGroup.class) @RequestBody HelpBo bo) {
+        return iHelpService.insertByBo(bo);
     }
 
     /**
@@ -99,5 +101,13 @@ public class HelpController extends BaseController {
     @DeleteMapping("/{ids}")
     public R<Void> remove(@NotEmpty(message = "主键不能为空") @PathVariable Long[] ids) {
         return toAjax(iHelpService.deleteWithValidByIds(Arrays.asList(ids), true));
+    }
+
+    /**
+     * 通过老师id查询帮扶列表
+     */
+    @GetMapping("/listByTeacherId")
+    public List<HelpVo> listByTeacherId(){
+        return iHelpService.listByTeacherId();
     }
 }

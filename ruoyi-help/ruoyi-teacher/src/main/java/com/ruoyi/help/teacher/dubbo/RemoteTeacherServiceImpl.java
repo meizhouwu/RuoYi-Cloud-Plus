@@ -71,4 +71,9 @@ public class RemoteTeacherServiceImpl implements RemoteTeacherService {
     public TeacherVo queryById(Long id) {
         return teacherService.queryById(id);
     }
+
+    @Override
+    public TeacherVo queryByUserId(Long id) {
+        return teacherService.queryByUserId(id);
+    }
 }

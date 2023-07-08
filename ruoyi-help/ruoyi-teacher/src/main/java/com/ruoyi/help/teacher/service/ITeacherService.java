@@ -58,4 +58,7 @@ public interface ITeacherService {
     List<TeacherVo> techTeacherList();
 
     List<TeacherVo> talkTeacherList();
+
+
+    TeacherVo queryByUserId(Long id);
 }

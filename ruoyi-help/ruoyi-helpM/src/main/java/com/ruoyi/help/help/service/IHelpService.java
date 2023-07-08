@@ -1,9 +1,12 @@
 package com.ruoyi.help.help.service;
 
+
+import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.mybatis.core.page.PageQuery;
 import com.ruoyi.common.mybatis.core.page.TableDataInfo;
-import com.ruoyi.help.help.domain.bo.HelpBo;
-import com.ruoyi.help.help.domain.vo.HelpVo;
+import com.ruoyi.help.api.domain.bo.HelpBo;
+import com.ruoyi.help.api.domain.vo.HelpVo;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.util.Collection;
 import java.util.List;
@@ -34,7 +37,7 @@ public interface IHelpService {
     /**
      * 修改帮扶管理
      */
-    Boolean insertByBo(HelpBo bo);
+    R<T> insertByBo(HelpBo bo);
 
     /**
      * 修改帮扶管理
@@ -45,4 +48,6 @@ public interface IHelpService {
      * 校验并批量删除帮扶管理信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+    List<HelpVo> listByTeacherId();
 }

@@ -42,3 +42,12 @@ export function delHelp(id) {
     method: 'delete'
   })
 }
+
+
+// 通过老师id查询所有
+export function listByTeacherId() {
+  return request({
+    url: '/help/help/listByTeacherId',
+    method: 'get'
+  })
+}

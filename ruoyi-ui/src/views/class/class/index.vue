@@ -140,6 +140,16 @@
           <span>{{getHelpTeacherListName(scope.row.helpTeacher)}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="讲师" align="center" prop="talkTeacher">
+        <template slot-scope="scope">
+          <span>{{getTalkTeacherListName(scope.row.talkTeacher)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="技术老师" align="center" prop="techTeacher">
+        <template slot-scope="scope">
+          <span>{{getTechTeacherListName(scope.row.techTeacher)}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

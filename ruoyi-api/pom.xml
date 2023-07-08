@@ -15,6 +15,7 @@
         <module>ruoyi-api-teacher</module>
         <module>ruoyi-api-class</module>
         <module>ruoyi-api-student</module>
+        <module>ruoyi-api-help</module>
     </modules>
 
     <artifactId>ruoyi-api</artifactId>
