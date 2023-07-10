@@ -7,12 +7,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.mybatis.core.page.PageQuery;
 import com.ruoyi.common.mybatis.core.page.TableDataInfo;
+import com.ruoyi.help.api.domain.Help;
 import com.ruoyi.help.api.domain.HelpTeacherHistory;
 import com.ruoyi.help.api.domain.bo.HelpTeacherHistoryBo;
 import com.ruoyi.help.api.domain.vo.HelpTeacherHistoryVo;
+import com.ruoyi.help.help.mapper.HelpMapper;
 import com.ruoyi.help.help.mapper.HelpTeacherHistoryMapper;
 import com.ruoyi.help.help.service.IHelpTeacherHistoryService;
+import com.ruoyi.help.help.utils.EmailUtil;
+import com.ruoyi.teacher.api.RemoteTeacherService;
 import lombok.RequiredArgsConstructor;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -30,6 +35,13 @@ import java.util.Map;
 public class HelpTeacherHistoryServiceImpl implements IHelpTeacherHistoryService {
 
     private final HelpTeacherHistoryMapper baseMapper;
+
+
+    private final HelpMapper helpMapper;
+
+
+    @DubboReference
+    private RemoteTeacherService remoteTeacherService;
 
     /**
      * 查询帮扶移交历史
@@ -80,6 +92,17 @@ public class HelpTeacherHistoryServiceImpl implements IHelpTeacherHistoryService
         if (flag) {
             bo.setId(add.getId());
         }
+        // 修改帮扶老师id以及状态
+        Long helpId = add.getHelpId();
+        Long newId = add.getNewId();
+        String note = add.getNote();
+        Help help = helpMapper.selectById(helpId);
+        help.setTeacherId(newId);
+        help.setDealStatus(1);
+        helpMapper.updateById(help);
+        // 发送邮件通知新老师
+        String email = remoteTeacherService.queryById(newId).getEmail();
+        EmailUtil.sendEmail(email,"帮扶移交通知",note);
         return flag;
     }
 

@@ -149,6 +149,12 @@
             icon="el-icon-edit"
             @click="handleOver(scope.row)"
           >帮扶移交</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleDone(scope.row)"
+          >完成帮扶</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -231,12 +237,8 @@
     <!--帮扶移交界面-->
     <el-dialog title="帮扶移交" :visible.sync="overFormOpen" width="500px" append-to-body>
       <el-form ref="overForm" :model="overForm" :rules="overFormRules" label-width="80px">
-        <el-form-item label="学生姓名" prop="name">
-          <el-input v-model="overForm.helpId" placeholder="请输入学生姓名">
-            <template slot-scope="scope">
-              <span>{{ scope.row.name}}</span>
-            </template>
-          </el-input>
+        <el-form-item label="学生姓名" prop="stuName">
+          <el-input v-model="overForm.stuName" placeholder="请输入学生姓名" :disabled="edit"/>
         </el-form-item>
         <el-form-item label="移交老师" prop="newId">
           <el-select v-model="overForm.newId" placeholder="请选择移交老师">
@@ -245,7 +247,7 @@
               :key="item.id"
               :label="item.name"
               :value="item.id"
-              v-if="item.id !=overForm.oldId"
+              v-if="item.id != overForm.oldId"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -254,10 +256,47 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
+        <el-button :loading="buttonLoading" type="primary" @click="submitOverForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <!--完成帮扶界面-->
+    <el-dialog :title="title" :visible.sync="DoneOpen" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="学生姓名" prop="name">
+          <el-input v-model="form.name" placeholder="请输入学生姓名" :disabled="edit"/>
+        </el-form-item>
+        <el-form-item label="处理状态" prop="dealStatus">
+          <el-select v-model="form.dealStatus" placeholder="请选择处理状态">
+            <el-option
+              v-for="dict in dict.type.help_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="老师备注" prop="teacherNote">
+          <el-input v-model="form.teacherNote" placeholder="请输入老师备注" type="textarea"/>
+        </el-form-item>
+        <el-form-item label="完成时间" prop="endDate">
+          <el-date-picker clearable
+                          v-model="form.endDate"
+                          type="datetime"
+                          value-format="yyyy-MM-dd HH:mm:ss"
+                          placeholder="请选择完成时间">
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
         <el-button :loading="buttonLoading" type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+
+
   </div>
 </template>
 
@@ -265,6 +304,7 @@
 import { listHelp, getHelp, delHelp, addHelp, updateHelp } from "@/api/help/help";
 import {listClass} from "@/api/class/class";
 import {listTeacher} from "@/api/teacher/teacher";
+import {addHelpTeacherHistory} from "@/api/help/helpTeacherHistory";
 
 export default {
   name: "Help",
@@ -307,6 +347,15 @@ export default {
         id: [
           { required: true, message: "不能为空", trigger: "blur" }
         ],
+        dealStatus: [
+          { required: true, message: "不能为空", trigger: "blur" }
+        ],
+        teacherNote: [
+          { required: true, message: "不能为空", trigger: "blur" }
+        ],
+        endDate: [
+          { required: true, message: "不能为空", trigger: "blur" }
+        ],
       },
       classList: [],
       teacherList: [],
@@ -320,7 +369,9 @@ export default {
         note: [
           { required: true, message: "不能为空", trigger: "blur" }
         ],
-      }
+      },
+      edit: true,
+      DoneOpen: false
     };
   },
   created() {
@@ -445,6 +496,7 @@ export default {
             updateHelp(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
+              this.DoneOpen = false;
               this.getList();
             }).finally(() => {
               this.buttonLoading = false;
@@ -486,13 +538,47 @@ export default {
     handleOver(row){
       this.overFormOpen = true;
       this.overForm = {
+        stuName: row.name,
         helpId: row.id,
         oldId: row.teacherId,
         newId: '',
         note: ''
       }
     },
-
+    /** 帮扶移交提交*/
+    submitOverForm() {
+      let param = {
+        oldId: this.overForm.oldId,
+        newId: this.overForm.newId,
+        helpId: this.overForm.helpId,
+        note: this.overForm.note,
+        // changeTime: ''
+      }
+      this.$refs["overForm"].validate(valid => {
+        if (valid) {
+          this.buttonLoading = true;
+          addHelpTeacherHistory(param).then(response => {
+            this.$modal.msgSuccess("移交成功");
+            this.overFormOpen = false;
+            this.getList();
+          }).finally(() => {
+            this.buttonLoading = false;
+          });
+        }
+      });
+    },
+    /** 完成帮扶弹出框*/
+    handleDone(row){
+      // this.loading = true;
+      // this.reset();
+      this.DoneOpen = true;
+      this.title = "完成帮扶";
+      const id = row.id || this.ids
+      getHelp(id).then(response => {
+        // this.loading = false;
+        this.form = response.data;
+      });
+    }
   }
 };
 </script>

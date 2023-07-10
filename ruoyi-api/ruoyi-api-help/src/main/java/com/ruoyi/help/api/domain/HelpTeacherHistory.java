@@ -46,6 +46,6 @@ public class HelpTeacherHistory extends BaseEntity {
     /**
      * 移交时间
      */
-    private Date changeTime;
+    private Date changeTime = new Date();
 
 }

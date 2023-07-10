@@ -235,6 +235,7 @@ export default {
     getList() {
       this.loading = true;
       listHelpTeacherHistory(this.queryParams).then(response => {
+        console.log(response)
         this.helpTeacherHistoryList = response.rows;
         this.total = response.total;
         this.loading = false;

@@ -1,6 +1,9 @@
 package com.ruoyi.help.help.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.symmetric.AES;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -21,6 +24,7 @@ import com.ruoyi.resource.api.RemoteMailService;
 import com.ruoyi.student.api.RemoteStudentService;
 import com.ruoyi.student.api.domain.bo.StudentBo;
 import com.ruoyi.student.api.domain.vo.StudentVo;
+import com.ruoyi.system.api.RemoteUserService;
 import com.ruoyi.teacher.api.RemoteTeacherService;
 import com.ruoyi.teacher.api.domain.vo.TeacherVo;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +32,7 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -54,6 +59,9 @@ public class HelpServiceImpl implements IHelpService {
     @DubboReference
     private RemoteMailService remoteMailService;
 
+    @DubboReference
+    private RemoteUserService remoteUserService;
+
 
 
 
@@ -71,7 +79,12 @@ public class HelpServiceImpl implements IHelpService {
      */
     @Override
     public TableDataInfo<HelpVo> queryPageList(HelpBo bo, PageQuery pageQuery) {
+        Long userId = LoginHelper.getUserId();
+        TeacherVo teacherVo = remoteTeacherService.queryByUserId(userId);
         LambdaQueryWrapper<Help> lqw = buildQueryWrapper(bo);
+        if (teacherVo != null){
+            lqw.eq(Help::getTeacherId,teacherVo.getId());
+        }
         Page<HelpVo> result = baseMapper.selectVoPage(pageQuery.build(), lqw);
         return TableDataInfo.build(result);
     }
@@ -175,8 +188,27 @@ public class HelpServiceImpl implements IHelpService {
     public Boolean updateByBo(HelpBo bo) {
         Help update = BeanUtil.toBean(bo, Help.class);
         validEntityBeforeSave(update);
-        return baseMapper.updateById(update) > 0;
+        int i = baseMapper.updateById(update);
+        // 发送邮件
+        Long id = update.getId();
+        String teacherNote = update.getTeacherNote();
+        Date startDate = update.getStartDate();
+        String date = DateUtil.format(startDate, "yyyy-MM-dd");
+        Date endDate = update.getEndDate();
+        String email = update.getEmail();
+        String name = update.getName();
+        String url = "http://localhost/appraise?code=";
+        String key = "123zxc123zxc1234";
+        AES aes = SecureUtil.aes(key.getBytes(StandardCharsets.UTF_8));
+        if (teacherNote != null && endDate != null){
+            String s = aes.encryptBase64(String.valueOf(id));
+            String subject = "请对本次帮扶评分";
+            String text = name + "你好，对于[" + date + "]的问题是否得到解决？ 请访问网址做出评价！" + url + s;
+            EmailUtil.sendEmail(email,subject,text);
+        }
+        return i > 0;
     }
+
 
     /**
      * 保存前的数据校验

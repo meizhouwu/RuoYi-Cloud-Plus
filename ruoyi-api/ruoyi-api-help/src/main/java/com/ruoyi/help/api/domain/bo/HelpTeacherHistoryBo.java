@@ -54,7 +54,7 @@ public class HelpTeacherHistoryBo extends BaseEntity {
     /**
      * 移交时间
      */
-    @NotNull(message = "移交时间不能为空", groups = { AddGroup.class, EditGroup.class })
+//    @NotNull(message = "移交时间不能为空", groups = { AddGroup.class, EditGroup.class })
     private Date changeTime;
 
 
