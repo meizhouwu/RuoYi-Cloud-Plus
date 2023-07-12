@@ -181,12 +181,12 @@ export default {
   },
   methods: {
     getListTeacher() {
-      listTeacher(this.queryParams).then(response => {
+      listTeacher().then(response => {
         this.teacherList = response.rows;
       });
     },
     getListClass() {
-      listClass(this.queryParams).then(response => {
+      listClass().then(response => {
         this.classesList = response.rows;
       });
     },

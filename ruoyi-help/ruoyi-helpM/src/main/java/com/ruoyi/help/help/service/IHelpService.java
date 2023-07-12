@@ -50,4 +50,6 @@ public interface IHelpService {
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
 
     List<HelpVo> listByTeacherId();
+
+    HelpVo queryByCodeId(String code);
 }

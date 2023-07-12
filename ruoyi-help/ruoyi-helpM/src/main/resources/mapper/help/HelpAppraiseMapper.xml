@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.help.help.mapper.HelpAppraiseMapper">
+
+    <resultMap type="com.ruoyi.help.api.domain.HelpAppraise" id="HelpAppraiseResult">
+    <result property="id" column="id"/>
+    <result property="helpId" column="help_id"/>
+    <result property="teacherId" column="teacher_id"/>
+    <result property="score" column="score"/>
+    <result property="appraise" column="appraise"/>
+    <result property="createTime" column="create_time"/>
+    <result property="createBy" column="create_by"/>
+    <result property="updateTime" column="update_time"/>
+    <result property="updateBy" column="update_by"/>
+    </resultMap>
+
+
+</mapper>

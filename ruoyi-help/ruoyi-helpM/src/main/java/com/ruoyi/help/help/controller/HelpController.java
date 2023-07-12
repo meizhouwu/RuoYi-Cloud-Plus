@@ -110,4 +110,13 @@ public class HelpController extends BaseController {
     public List<HelpVo> listByTeacherId(){
         return iHelpService.listByTeacherId();
     }
+
+
+    /**
+     * 解析前端传递的字符串
+     */
+    @GetMapping("/code/{code}")
+    public R<HelpVo> queryByCode(@PathVariable String code) {
+        return R.ok(iHelpService.queryByCodeId(code));
+    }
 }

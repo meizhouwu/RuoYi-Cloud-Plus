@@ -241,6 +241,14 @@ public class HelpServiceImpl implements IHelpService {
         return baseMapper.selectVoList(wrapper, HelpVo.class);
     }
 
+    @Override
+    public HelpVo queryByCodeId(String code) {
+        String key = "123zxc123zxc1234";
+        AES aes = SecureUtil.aes(key.getBytes(StandardCharsets.UTF_8));
+        String s = aes.decryptStr(code);
+        Long aLong = Long.valueOf(s);
+        return baseMapper.selectVoById(aLong);
+    }
 
 
 }

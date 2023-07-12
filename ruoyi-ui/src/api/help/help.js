@@ -51,3 +51,11 @@ export function listByTeacherId() {
     method: 'get'
   })
 }
+
+// 通过code解密查询
+export function getHelpByCode(code) {
+  return request({
+    url: '/help/help/code/' + code,
+    method: 'get'
+  })
+}
