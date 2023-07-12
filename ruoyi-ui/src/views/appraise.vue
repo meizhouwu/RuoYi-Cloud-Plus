@@ -2,49 +2,31 @@
   <div class="login">
     <el-form ref="form" :model="form" :rules="rules" class="login-form">
       <h3 class="title">我要评价</h3>
-      <span style="font-weight: bold">老师名字</span>
-      <el-form-item prop="teacherId">
-        <el-select v-model="form.teacherId" placeholder="请选择意向老师" style="width: 100%" clearable>
-          <el-option
-            v-for="item in teacherList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-            :disabled="edit"
-            v-if="item.id == help.teacherId"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-
-      <span style="font-weight: bold">学生名字</span>
-      <el-form-item>
-        <el-input
-          v-model="form.studentId"
-          type="email"
-          auto-complete="off"
-          placeholder="请填写正确的邮箱（必填）"
-          :disabled="edit">
+      <el-form-item label="老师名字">
+        <el-input v-model="help.teacherName" type="text" auto-complete="off" disabled>
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
 
-      <span style="font-weight: bold">处理时间</span>
-      <el-form-item>
+      <el-form-item label="学生名字">
+        <el-input v-model="help.studentName" type="text" auto-complete="off" disabled>
+          <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
+        </el-input>
+      </el-form-item>
+
+      <el-form-item label="处理时间">
         <el-date-picker clearable
-                        v-model="form.doneDate"
+                        v-model="help.endTime"
                         type="datetime"
                         value-format="yyyy-MM-dd HH:mm:ss"
-                        placeholder="请选择预约日期，提前三天预约（必填）"
-                        :picker-options="afterDate"
-                        style="width: 100%"
-                        :disabled="edit"
-        >
-        </el-date-picker>
+                        disabled="true"
+                        style="width: 100%"/>
       </el-form-item>
 
-      <span style="font-weight: bold">问题类型</span>
-      <el-form-item>
-        <el-select v-model="form.errType" placeholder="请选择班级" style="width: 100%" :disabled="edit" clearable>
+
+
+      <el-form-item label="问题类型">
+        <el-select v-model="form.errType" disabled style="width: 100%">
           <el-option
             v-for="dict in dict.type.help_student_err"
             :key="dict.value"
@@ -54,28 +36,34 @@
         </el-select>
       </el-form-item>
 
-      <span style="font-weight: bold">打分</span>
+
+
+
+
+      <!--    实现五颗星星进行评价-->
       <el-form-item prop="score">
-        <el-select v-model="form.score" placeholder="请选择问题（必填）" style="width: 100%" clearable>
-          <el-option
-            v-for="dict in dict.type.help_student_err"
-            :key="dict.value"
-            :label="dict.label"
-            :value="parseInt(dict.value)"
-          ></el-option>
-        </el-select>
+        <div class="star">
+          <el-rate
+            ref="form"
+            v-model="form.score"
+            disabled-void-class
+          >
+          </el-rate>
+          <div>
+            <span v-if="form.score==1">伤心</span>
+            <span v-if="form.score==2">难过</span>
+            <span v-if="form.score==3">一般</span>
+            <span v-if="form.score==4">不错</span>
+            <span v-if="form.score==5">优秀</span>
+          </div>
+        </div>
       </el-form-item>
 
-      <span style="font-weight: bold">服务评价</span>
       <el-form-item prop="appraise">
-        <el-input
-          v-model="form.appraise"
-          type="textarea"
-          auto-complete="off"
-          placeholder="请对本次服务进行评价"
-        >
-          <svg-icon slot="prefix" icon-class="validwx" class="el-input__icon input-icon" />
-        </el-input>
+        <el-input type="textarea"
+                  resize="none"
+                  v-model="help.appraise"
+                  placeholder="请输入评价内容"/>
       </el-form-item>
 
 
@@ -116,14 +104,7 @@ export default {
   dicts: ['help_student_err'],
   data() {
     return {
-      form: {
-        teacherId: "",
-        studentId: "",
-        doneDate: '',
-        errType: '',
-        score: '',
-        appraise: '',
-      },
+      form: {},
       rules: {
         score: [
           { required: true, trigger: "blur", message: "请不要忘记打分" }
