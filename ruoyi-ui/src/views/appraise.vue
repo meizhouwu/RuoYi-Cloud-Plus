@@ -3,20 +3,20 @@
     <el-form ref="form" :model="form" :rules="rules" class="login-form">
       <h3 class="title">我要评价</h3>
       <el-form-item label="老师名字">
-        <el-input v-model="help.teacherName" type="text" auto-complete="off" disabled>
+        <el-input v-model="form.teacherName" type="text" auto-complete="off" disabled>
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
 
       <el-form-item label="学生名字">
-        <el-input v-model="help.studentName" type="text" auto-complete="off" disabled>
+        <el-input v-model="form.studentName" type="text" auto-complete="off" disabled>
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
 
       <el-form-item label="处理时间">
         <el-date-picker clearable
-                        v-model="help.endTime"
+                        v-model="form.endTime"
                         type="datetime"
                         value-format="yyyy-MM-dd HH:mm:ss"
                         disabled="true"
@@ -38,31 +38,23 @@
 
 
 
-
-
-      <!--    实现五颗星星进行评价-->
+      <!--打分-->
       <el-form-item prop="score">
-        <div class="star">
-          <el-rate
-            ref="form"
-            v-model="form.score"
-            disabled-void-class
-          >
-          </el-rate>
-          <div>
-            <span v-if="form.score==1">伤心</span>
-            <span v-if="form.score==2">难过</span>
-            <span v-if="form.score==3">一般</span>
-            <span v-if="form.score==4">不错</span>
-            <span v-if="form.score==5">优秀</span>
-          </div>
-        </div>
+        <el-rate
+          style="text-align: center"
+          v-model="form.score"
+          show-text>
+        </el-rate>
+
+
       </el-form-item>
+
+
+
 
       <el-form-item prop="appraise">
         <el-input type="textarea"
-                  resize="none"
-                  v-model="help.appraise"
+                  v-model="form.appraise"
                   placeholder="请输入评价内容"/>
       </el-form-item>
 
@@ -94,10 +86,11 @@
 
 
 
-import {listTeacher} from "@/api/teacher/teacher";
+
 import {listStudent} from "@/api/student/student";
 import {addHelpAppraise} from "@/api/help/helpAppraise";
 import {getHelpByCode} from "@/api/help/help";
+import {getTeacher, listTeacher} from "@/api/teacher/teacher";
 
 export default {
   name: "appraise",
@@ -115,7 +108,7 @@ export default {
       },
       loading: false,
       edit: true,
-      teacherList: [],
+      teacher: {},
       studentList: [],
       help: []
 
@@ -130,53 +123,45 @@ export default {
   //   }
   // },
   created() {
-    this.getListTeacher();
-    this.getListStudent();
     let code = location.href.split("=")[1];
     console.log(code)
     this.getHelp(code);
   },
   methods: {
-    getListTeacher() {
-      listTeacher().then(response => {
-        this.teacherList = response.rows;
-        console.log(this.teacherList)
-      });
-    },
-    getListStudent() {
-      listStudent().then(response => {
-        this.studentList = response.rows;
-      });
-    },
-
     getHelp(code){
       getHelpByCode(code).then(response => {
-        this.help = response.data;
-        console.log(this.help)
+        debugger
+        console.log(response);
+        this.form = {
+          teacherName: getTeacher(response.data.teacherId).then(res => {this.form.teacherName = res.data.name}),
+          studentName: response.data.name,
+          endTime: response.data.endDate,
+          errType: response.data.errType,
+          teacherId: response.data.teacherId,
+          score: '',
+          appraise: '',
+          id: response.data.id
+        }
+        console.log(this.form)
       })
     },
 
     handle() {
+      let params = {
+        teacherId: this.form.teacherId,
+        helpId: this.form.id,
+        score: this.form.score,
+        appraise: this.form.appraise,
+      }
       this.$refs["form"].validate(valid => {
         if (valid) {
-          addHelpAppraise(this.form).then(response => {
+          addHelpAppraise(params).then(response => {
             debugger
             console.log(response)
             this.$modal.msgSuccess("评价成功");
           }).catch()
         }
-        this.reset();
       });
-    },
-    reset() {
-      this.form = {
-        teacherId: "",
-        studentId: "",
-        doneDate: '',
-        errType: '',
-        score: '',
-        appraise: '',
-      };
     },
   }
 };

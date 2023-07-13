@@ -72,7 +72,7 @@ public class HelpAppraiseController extends BaseController {
     /**
      * 新增帮扶学生评价
      */
-    @SaCheckPermission("help:helpAppraise:add")
+//    @SaCheckPermission("help:helpAppraise:add")
     @Log(title = "帮扶学生评价", businessType = BusinessType.INSERT)
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody HelpAppraiseBo bo) {

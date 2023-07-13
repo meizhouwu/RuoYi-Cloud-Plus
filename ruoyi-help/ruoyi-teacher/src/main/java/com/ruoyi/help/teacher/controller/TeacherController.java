@@ -63,7 +63,7 @@ public class TeacherController extends BaseController {
      *
      * @param id 主键
      */
-    @SaCheckPermission("teacher:teacher:query")
+//    @SaCheckPermission("teacher:teacher:query")
     @GetMapping("/{id}")
     public R<TeacherVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
         return R.ok(iTeacherService.queryById(id));
