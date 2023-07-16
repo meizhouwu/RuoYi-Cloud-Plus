@@ -1,13 +1,15 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="老师id" prop="teacherId">
-        <el-input
-          v-model="queryParams.teacherId"
-          placeholder="请输入老师id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="老师名字" prop="teacherId">
+        <el-select v-model="queryParams.teacherId" placeholder="请选择老师" clearable>
+          <el-option
+            v-for="item in teacherList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="报表创建时间" prop="time">
         <el-date-picker clearable
@@ -73,15 +75,15 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="" align="center" prop="id" v-if="true"/>
       <el-table-column label="老师姓名" align="center" prop="teacherId">
-<!--        <template slot-scope="scope">-->
-<!--          <sapn>{{getTeacherName(scope.row.teacherId)}}</sapn>-->
-<!--        </template>-->
+        <template slot-scope="scope">
+          <sapn>{{getTeacherListName(scope.row.teacherId)}}</sapn>
+        </template>
       </el-table-column>
       <el-table-column label="帮扶数量" align="center" prop="helpCount" />
       <el-table-column label="平均分数" align="center" prop="averageScore" />
       <el-table-column label="报表创建时间" align="center" prop="time" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.time, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.time, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -143,7 +145,7 @@
 
 <script>
 import { listHelpReport, getHelpReport, delHelpReport, addHelpReport, updateHelpReport } from "@/api/help/helpReport";
-import {getTeacher} from "@/api/teacher/teacher";
+import {getTeacher, listTeacher} from "@/api/teacher/teacher";
 
 export default {
   name: "HelpReport",
@@ -196,17 +198,31 @@ export default {
           { required: true, message: "报表创建时间不能为空", trigger: "blur" }
         ],
       },
+      teacherList: []
     };
   },
   created() {
     this.getList();
+    this.getTeacherList();
   },
   methods: {
-    // getTeacherName(id){
-    //   getTeacher(id).then(res => {
-    //     this.form.teacherName = res.data.name;
-    //   })
-    // },
+    getTeacherList(){
+      this.loading = true;
+      listTeacher().then(response => {
+        console.log(response)
+        this.teacherList = response.rows;
+        this.loading = false;
+      })
+    },
+    /** 班级名称，显示 */
+    getTeacherListName(id) {
+      for (let i = 0; i < this.teacherList.length; i++) {
+        if (this.teacherList[i].id === id) {
+          return this.teacherList[i].name;
+        }
+      }
+      return null; // 如果没有找到对应的教师，则返回 null
+    },
     /** 查询帮扶报表中心列表 */
     getList() {
       this.loading = true;

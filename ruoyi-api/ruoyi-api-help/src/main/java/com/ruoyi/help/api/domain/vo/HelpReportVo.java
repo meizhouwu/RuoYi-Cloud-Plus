@@ -2,6 +2,7 @@ package com.ruoyi.help.api.domain.vo;
 
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.fastjson2.annotation.JSONField;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -49,6 +50,7 @@ public class HelpReportVo implements Serializable {
      * 报表创建时间
      */
     @ExcelProperty(value = "报表创建时间")
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date time;
 
 

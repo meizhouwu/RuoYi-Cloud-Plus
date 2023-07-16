@@ -5,6 +5,7 @@ import com.ruoyi.common.core.validate.EditGroup;
 import com.ruoyi.common.core.web.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -48,6 +49,8 @@ public class HelpReportBo extends BaseEntity {
      * 报表创建时间
      */
 //    @NotNull(message = "报表创建时间不能为空", groups = { AddGroup.class, EditGroup.class })
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date time;
 
 
