@@ -146,6 +146,7 @@ export default {
       })
     },
 
+
     handle() {
       let params = {
         teacherId: this.form.teacherId,
@@ -159,6 +160,7 @@ export default {
             debugger
             console.log(response)
             this.$modal.msgSuccess("评价成功");
+
           }).catch()
         }
       });

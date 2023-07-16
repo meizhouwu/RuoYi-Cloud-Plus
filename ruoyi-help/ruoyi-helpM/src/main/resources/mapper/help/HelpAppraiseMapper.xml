@@ -15,6 +15,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <result property="updateTime" column="update_time"/>
     <result property="updateBy" column="update_by"/>
     </resultMap>
+    <select id="report" resultType="com.ruoyi.help.api.domain.HelpReport">
+        SELECT
+            teacher_id,
+            COUNT(*) AS help_count,
+            AVG(score) AS average_score
+        FROM
+            help_help_appraise
+        GROUP BY
+            teacher_id;
+    </select>
 
 
 </mapper>

@@ -1,8 +1,11 @@
 package com.ruoyi.job.service;
 
+import com.ruoyi.common.core.domain.R;
+import com.ruoyi.help.api.RemoteHelpReportService;
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedInputStream;
@@ -12,7 +15,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 /**
  * XxlJob开发示例（Bean模式）
@@ -29,6 +31,18 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class SampleService {
 
+    @DubboReference
+    private RemoteHelpReportService remoteHelpReportService;
+
+    @XxlJob("reportJobHandler")
+    public void reportJobHandler() throws Exception {
+        R report = remoteHelpReportService.report();
+        XxlJobHelper.log(report.getMsg());
+        System.out.println(report.getMsg());
+    }
+
+
+
 
     /**
      * 1、简单任务示例（Bean模式）
@@ -36,7 +50,7 @@ public class SampleService {
     @XxlJob("demoJobHandler")
     public void demoJobHandler() throws Exception {
         XxlJobHelper.log("XXL-JOB, Hello World.");
-
+        System.out.println("测试一下");
         for (int i = 0; i < 5; i++) {
             XxlJobHelper.log("beat at:" + i);
         }

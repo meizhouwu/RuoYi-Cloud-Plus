@@ -46,4 +46,6 @@ public interface IHelpAppraiseService {
      * 校验并批量删除帮扶学生评价信息
      */
     Boolean deleteWithValidByIds(Collection<Long> ids, Boolean isValid);
+
+
 }

@@ -2,7 +2,10 @@ package com.ruoyi.help.help.mapper;
 
 import com.ruoyi.common.mybatis.core.mapper.BaseMapperPlus;
 import com.ruoyi.help.api.domain.HelpAppraise;
+import com.ruoyi.help.api.domain.HelpReport;
 import com.ruoyi.help.api.domain.vo.HelpAppraiseVo;
+
+import java.util.List;
 
 
 /**
@@ -13,4 +16,5 @@ import com.ruoyi.help.api.domain.vo.HelpAppraiseVo;
  */
 public interface HelpAppraiseMapper extends BaseMapperPlus<HelpAppraiseMapper, HelpAppraise, HelpAppraiseVo> {
 
+    List<HelpReport> report();
 }

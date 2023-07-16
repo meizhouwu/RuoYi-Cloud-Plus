@@ -100,4 +100,5 @@ public class HelpAppraiseController extends BaseController {
     public R<Void> remove(@NotEmpty(message = "主键不能为空") @PathVariable Long[] ids) {
         return toAjax(iHelpAppraiseService.deleteWithValidByIds(Arrays.asList(ids), true));
     }
+
 }

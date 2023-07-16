@@ -70,6 +70,12 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-api-system</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.meizhouwu</groupId>
+            <artifactId>ruoyi-api-help</artifactId>
+            <version>1.7.0</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 
