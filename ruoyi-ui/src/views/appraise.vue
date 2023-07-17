@@ -45,8 +45,6 @@
           v-model="form.score"
           show-text>
         </el-rate>
-
-
       </el-form-item>
 
 

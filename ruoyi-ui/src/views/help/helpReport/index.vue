@@ -11,13 +11,22 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="报表创建时间" prop="time">
-        <el-date-picker clearable
+      <el-form-item label="时间范围" prop="time">
+<!--        <el-date-picker clearable
           v-model="queryParams.time"
-          type="date"
-          value-format="yyyy-MM-dd"
+          type="datetime"
           placeholder="请选择报表创建时间">
-        </el-date-picker>
+        </el-date-picker>-->
+        <el-date-picker
+          v-model="daterangeTime"
+          style="width: 240px"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :default-time="['00:00:00', '23:59:59']"
+        ></el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -198,7 +207,9 @@ export default {
           { required: true, message: "报表创建时间不能为空", trigger: "blur" }
         ],
       },
-      teacherList: []
+      teacherList: [],
+      // 报表创建时间时间范围
+      daterangeTime: [],
     };
   },
   created() {
@@ -226,6 +237,11 @@ export default {
     /** 查询帮扶报表中心列表 */
     getList() {
       this.loading = true;
+      this.queryParams.params = {};
+      if (null != this.daterangeTime && '' != this.daterangeTime) {
+        this.queryParams.params["beginTime"] = this.daterangeTime[0];
+        this.queryParams.params["endTime"] = this.daterangeTime[1];
+      }
       listHelpReport(this.queryParams).then(response => {
         this.helpReportList = response.rows;
         this.total = response.total;

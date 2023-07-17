@@ -1,10 +1,12 @@
 package com.ruoyi.help.help.service;
 
 
+import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.mybatis.core.page.PageQuery;
 import com.ruoyi.common.mybatis.core.page.TableDataInfo;
 import com.ruoyi.help.api.domain.bo.HelpAppraiseBo;
 import com.ruoyi.help.api.domain.vo.HelpAppraiseVo;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,7 +37,7 @@ public interface IHelpAppraiseService {
     /**
      * 修改帮扶学生评价
      */
-    Boolean insertByBo(HelpAppraiseBo bo);
+    R<T> insertByBo(HelpAppraiseBo bo);
 
     /**
      * 修改帮扶学生评价

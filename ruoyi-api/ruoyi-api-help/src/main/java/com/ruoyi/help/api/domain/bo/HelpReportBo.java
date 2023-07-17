@@ -50,7 +50,7 @@ public class HelpReportBo extends BaseEntity {
      */
 //    @NotNull(message = "报表创建时间不能为空", groups = { AddGroup.class, EditGroup.class })
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
 
 

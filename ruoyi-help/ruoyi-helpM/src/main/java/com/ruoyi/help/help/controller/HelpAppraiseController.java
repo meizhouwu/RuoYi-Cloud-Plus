@@ -14,6 +14,7 @@ import com.ruoyi.help.api.domain.bo.HelpAppraiseBo;
 import com.ruoyi.help.api.domain.vo.HelpAppraiseVo;
 import com.ruoyi.help.help.service.IHelpAppraiseService;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,8 +76,8 @@ public class HelpAppraiseController extends BaseController {
 //    @SaCheckPermission("help:helpAppraise:add")
     @Log(title = "帮扶学生评价", businessType = BusinessType.INSERT)
     @PostMapping()
-    public R<Void> add(@Validated(AddGroup.class) @RequestBody HelpAppraiseBo bo) {
-        return toAjax(iHelpAppraiseService.insertByBo(bo));
+    public R<T> add(@Validated(AddGroup.class) @RequestBody HelpAppraiseBo bo) {
+        return iHelpAppraiseService.insertByBo(bo);
     }
 
     /**

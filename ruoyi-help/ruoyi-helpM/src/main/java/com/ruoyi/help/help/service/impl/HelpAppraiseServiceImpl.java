@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.mybatis.core.page.PageQuery;
 import com.ruoyi.common.mybatis.core.page.TableDataInfo;
@@ -11,8 +12,10 @@ import com.ruoyi.help.api.domain.HelpAppraise;
 import com.ruoyi.help.api.domain.bo.HelpAppraiseBo;
 import com.ruoyi.help.api.domain.vo.HelpAppraiseVo;
 import com.ruoyi.help.help.mapper.HelpAppraiseMapper;
+import com.ruoyi.help.help.mapper.HelpMapper;
 import com.ruoyi.help.help.service.IHelpAppraiseService;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -30,6 +33,8 @@ import java.util.Map;
 public class HelpAppraiseServiceImpl implements IHelpAppraiseService {
 
     private final HelpAppraiseMapper baseMapper;
+
+    private final HelpMapper helpMapper;
 
     /**
      * 查询帮扶学生评价
@@ -72,14 +77,20 @@ public class HelpAppraiseServiceImpl implements IHelpAppraiseService {
      * 新增帮扶学生评价
      */
     @Override
-    public Boolean insertByBo(HelpAppraiseBo bo) {
+    public R<T> insertByBo(HelpAppraiseBo bo) {
+        //评价限制
+        Long helpId = bo.getHelpId();
+        HelpAppraise helpAppraise = baseMapper.selectOne(new LambdaQueryWrapper<HelpAppraise>().eq(HelpAppraise::getHelpId, helpId));
+        if (helpAppraise != null){
+            return R.fail("不能重复评价");
+        }
         HelpAppraise add = BeanUtil.toBean(bo, HelpAppraise.class);
         validEntityBeforeSave(add);
         boolean flag = baseMapper.insert(add) > 0;
         if (flag) {
             bo.setId(add.getId());
         }
-        return flag;
+        return R.ok();
     }
 
     /**

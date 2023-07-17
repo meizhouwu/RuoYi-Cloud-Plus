@@ -43,4 +43,5 @@ public class HelpReport extends BaseEntity {
      */
     private Date time = new Date();
 
+
 }

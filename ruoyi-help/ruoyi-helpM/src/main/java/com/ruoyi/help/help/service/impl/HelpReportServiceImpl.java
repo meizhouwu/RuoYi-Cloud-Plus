@@ -66,7 +66,9 @@ public class HelpReportServiceImpl implements IHelpReportService {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<HelpReport> lqw = Wrappers.lambdaQuery();
         lqw.eq(bo.getTeacherId() != null, HelpReport::getTeacherId, bo.getTeacherId());
-        lqw.eq(bo.getTime() != null, HelpReport::getTime, bo.getTime());
+//        lqw.eq(bo.getTime() != null, HelpReport::getTime, bo.getTime());
+        lqw.between(params.get("beginTime") != null && params.get("endTime") != null,
+            HelpReport::getTime ,params.get("beginTime"), params.get("endTime"));
         return lqw;
     }
 
